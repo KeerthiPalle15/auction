@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/player_model.dart';
-import '../services/supabase_service.dart';
 import 'supabase_provider.dart';
 
 final playersProvider = StreamProvider<List<PlayerModel>>((ref) {

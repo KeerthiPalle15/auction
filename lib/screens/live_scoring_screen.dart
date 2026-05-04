@@ -38,11 +38,10 @@ class _LiveScoringScreenState extends ConsumerState<LiveScoringScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       wifiService = ref.read(wifiServiceProvider);
       ref.listen(wifiStatusProvider, (previous, next) {
-        if (next != null && next.value == ConnectionStatus.paired) {
+        if (next.value == ConnectionStatus.paired) {
           setState(() => _wifiConnected = true);
-        } else if (next != null &&
-            (next.value == ConnectionStatus.disconnected ||
-                next.value == ConnectionStatus.error)) {
+        } else if ((next.value == ConnectionStatus.disconnected ||
+            next.value == ConnectionStatus.error)) {
           setState(() => _wifiConnected = false);
         }
       });

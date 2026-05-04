@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/wifi_scoring_service.dart';
-import '../models/match_event_model.dart';
 
 final wifiServiceProvider = Provider<WifiScoringService>((ref) {
   final service = WifiScoringService();

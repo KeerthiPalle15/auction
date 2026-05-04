@@ -10,7 +10,8 @@ class MatchManagementScreen extends ConsumerStatefulWidget {
   const MatchManagementScreen({super.key});
 
   @override
-  ConsumerState<MatchManagementScreen> createState() => _MatchManagementScreenState();
+  ConsumerState<MatchManagementScreen> createState() =>
+      _MatchManagementScreenState();
 }
 
 class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
@@ -45,7 +46,9 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
 
   void _createMatch() async {
     if (_t1 == null || _t2 == null || _t1 == _t2) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Select two different teams')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select two different teams')),
+      );
       return;
     }
 
@@ -61,16 +64,20 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
     }
 
     try {
-      await ref.read(supabaseServiceProvider).createMatch(
-        _t1!,
-        _t2!,
-        venue: _venueController.text.isEmpty ? null : _venueController.text,
-        scheduledAt: scheduledAt,
-        totalOvers: int.tryParse(_oversController.text) ?? 20,
-      );
+      await ref
+          .read(supabaseServiceProvider)
+          .createMatch(
+            _t1!,
+            _t2!,
+            venue: _venueController.text.isEmpty ? null : _venueController.text,
+            scheduledAt: scheduledAt,
+            totalOvers: int.tryParse(_oversController.text) ?? 20,
+          );
       if (mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Match scheduled successfully!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Match scheduled successfully!')),
+        );
         setState(() {
           _t1 = null;
           _t2 = null;
@@ -81,7 +88,9 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -103,32 +112,56 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text('Schedule New Match', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const Text(
+                  'Schedule New Match',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _t1,
+                  initialValue: _t1,
                   decoration: const InputDecoration(labelText: 'Team 1'),
-                  items: teams.map((t) => DropdownMenuItem(value: t.id, child: Text(t.name))).toList(),
+                  items: teams
+                      .map(
+                        (t) =>
+                            DropdownMenuItem(value: t.id, child: Text(t.name)),
+                      )
+                      .toList(),
                   onChanged: (v) => setStateSB(() => _t1 = v),
                 ),
                 const SizedBox(height: 8),
-                const Center(child: Text('VS', style: TextStyle(fontWeight: FontWeight.bold))),
+                const Center(
+                  child: Text(
+                    'VS',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _t2,
+                  initialValue: _t2,
                   decoration: const InputDecoration(labelText: 'Team 2'),
-                  items: teams.map((t) => DropdownMenuItem(value: t.id, child: Text(t.name))).toList(),
+                  items: teams
+                      .map(
+                        (t) =>
+                            DropdownMenuItem(value: t.id, child: Text(t.name)),
+                      )
+                      .toList(),
                   onChanged: (v) => setStateSB(() => _t2 = v),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _venueController,
-                  decoration: const InputDecoration(labelText: 'Venue', prefixIcon: Icon(Icons.location_on)),
+                  decoration: const InputDecoration(
+                    labelText: 'Venue',
+                    prefixIcon: Icon(Icons.location_on),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _oversController,
-                  decoration: const InputDecoration(labelText: 'Match Overs', prefixIcon: Icon(Icons.timer)),
+                  decoration: const InputDecoration(
+                    labelText: 'Match Overs',
+                    prefixIcon: Icon(Icons.timer),
+                  ),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
@@ -137,11 +170,15 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () async {
-                           await _pickDate();
-                           setStateSB(() {});
+                          await _pickDate();
+                          setStateSB(() {});
                         },
                         icon: const Icon(Icons.calendar_today),
-                        label: Text(_selectedDate == null ? 'Pick Date' : DateFormat('MMM d, y').format(_selectedDate!)),
+                        label: Text(
+                          _selectedDate == null
+                              ? 'Pick Date'
+                              : DateFormat('MMM d, y').format(_selectedDate!),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -152,7 +189,11 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
                           setStateSB(() {});
                         },
                         icon: const Icon(Icons.access_time),
-                        label: Text(_selectedTime == null ? 'Pick Time' : _selectedTime!.format(context)),
+                        label: Text(
+                          _selectedTime == null
+                              ? 'Pick Time'
+                              : _selectedTime!.format(context),
+                        ),
                       ),
                     ),
                   ],
@@ -160,14 +201,17 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _createMatch,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
                   child: const Text('SCHEDULE MATCH'),
                 ),
                 const SizedBox(height: 24),
               ],
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -182,7 +226,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
         future: ref.read(supabaseServiceProvider).getTeams(),
         builder: (context, teamSnapshot) {
           final teams = teamSnapshot.data ?? [];
-          
+
           return matchesAsync.when(
             data: (matches) {
               if (matches.isEmpty) {
@@ -194,17 +238,27 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
                 itemCount: matches.length,
                 itemBuilder: (ctx, i) {
                   final match = matches[i];
-                  final t1 = teams.firstWhere((t) => t.id == match.team1Id, orElse: () => TeamModel(id: '', name: 'Unknown', purse: 0));
-                  final t2 = teams.firstWhere((t) => t.id == match.team2Id, orElse: () => TeamModel(id: '', name: 'Unknown', purse: 0));
+                  final t1 = teams.firstWhere(
+                    (t) => t.id == match.team1Id,
+                    orElse: () => TeamModel(id: '', name: 'Unknown', purse: 0),
+                  );
+                  final t2 = teams.firstWhere(
+                    (t) => t.id == match.team2Id,
+                    orElse: () => TeamModel(id: '', name: 'Unknown', purse: 0),
+                  );
 
                   return Card(
                     child: ListTile(
                       title: Text('${t1.name} vs ${t2.name}'),
-                      subtitle: Text('${match.venue ?? "No Venue"} | ${match.scheduledAt != null ? DateFormat('MMM d, h:mm a').format(match.scheduledAt!) : "TBD"}'),
+                      subtitle: Text(
+                        '${match.venue ?? "No Venue"} | ${match.scheduledAt != null ? DateFormat('MMM d, h:mm a').format(match.scheduledAt!) : "TBD"}',
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {
-                          await ref.read(supabaseServiceProvider).deleteMatch(match.id);
+                          await ref
+                              .read(supabaseServiceProvider)
+                              .deleteMatch(match.id);
                         },
                       ),
                     ),
@@ -215,7 +269,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen> {
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, _) => Center(child: Text('Error: $err')),
           );
-        }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

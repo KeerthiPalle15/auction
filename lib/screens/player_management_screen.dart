@@ -8,14 +8,21 @@ class PlayerManagementScreen extends ConsumerStatefulWidget {
   const PlayerManagementScreen({super.key});
 
   @override
-  ConsumerState<PlayerManagementScreen> createState() => _PlayerManagementScreenState();
+  ConsumerState<PlayerManagementScreen> createState() =>
+      _PlayerManagementScreenState();
 }
 
-class _PlayerManagementScreenState extends ConsumerState<PlayerManagementScreen> {
+class _PlayerManagementScreenState
+    extends ConsumerState<PlayerManagementScreen> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController(text: '500');
   String _role = 'batsman';
-  final List<String> _roles = ['batsman', 'bowler', 'all-rounder', 'wicketkeeper'];
+  final List<String> _roles = [
+    'batsman',
+    'bowler',
+    'all-rounder',
+    'wicketkeeper',
+  ];
 
   void _showPlayerForm([PlayerModel? player]) {
     if (player != null) {
@@ -44,24 +51,46 @@ class _PlayerManagementScreenState extends ConsumerState<PlayerManagementScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(player == null ? 'Add New Player' : 'Edit Player', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(
+                  player == null ? 'Add New Player' : 'Edit Player',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Player Name', prefixIcon: Icon(Icons.person)),
+                  decoration: const InputDecoration(
+                    labelText: 'Player Name',
+                    prefixIcon: Icon(Icons.person),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _role,
-                  decoration: const InputDecoration(labelText: 'Role', prefixIcon: Icon(Icons.sports_cricket)),
-                  items: _roles.map((r) => DropdownMenuItem(value: r, child: Text(r.toUpperCase()))).toList(),
+                  initialValue: _role,
+                  decoration: const InputDecoration(
+                    labelText: 'Role',
+                    prefixIcon: Icon(Icons.sports_cricket),
+                  ),
+                  items: _roles
+                      .map(
+                        (r) => DropdownMenuItem(
+                          value: r,
+                          child: Text(r.toUpperCase()),
+                        ),
+                      )
+                      .toList(),
                   onChanged: (v) => setStateSB(() => _role = v!),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _priceController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Base Price (₹)', prefixIcon: Icon(Icons.currency_rupee)),
+                  decoration: const InputDecoration(
+                    labelText: 'Base Price (₹)',
+                    prefixIcon: Icon(Icons.currency_rupee),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -72,23 +101,32 @@ class _PlayerManagementScreenState extends ConsumerState<PlayerManagementScreen>
                       'base_price': int.tryParse(_priceController.text) ?? 500,
                     };
                     if (player == null) {
-                      await ref.read(supabaseServiceProvider).client.from('players').insert(data);
+                      await ref
+                          .read(supabaseServiceProvider)
+                          .client
+                          .from('players')
+                          .insert(data);
                     } else {
-                      await ref.read(supabaseServiceProvider).updatePlayer(player.id, data);
+                      await ref
+                          .read(supabaseServiceProvider)
+                          .updatePlayer(player.id, data);
                     }
                     if (mounted) {
                       Navigator.pop(context);
                       ref.invalidate(playersProvider);
                     }
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
                   child: Text(player == null ? 'ADD PLAYER' : 'UPDATE PLAYER'),
                 ),
                 const SizedBox(height: 24),
               ],
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -116,17 +154,24 @@ class _PlayerManagementScreenState extends ConsumerState<PlayerManagementScreen>
                     child: const Icon(Icons.person, color: Colors.blue),
                   ),
                   title: Text(player.name),
-                  subtitle: Text('${player.role.toUpperCase()} | Base: ₹${player.basePrice}'),
+                  subtitle: Text(
+                    '${player.role.toUpperCase()} | Base: ₹${player.basePrice}',
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(icon: const Icon(Icons.edit, color: Colors.blue), onPressed: () => _showPlayerForm(player)),
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red), 
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () => _showPlayerForm(player),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {
-                          await ref.read(supabaseServiceProvider).deletePlayer(player.id);
+                          await ref
+                              .read(supabaseServiceProvider)
+                              .deletePlayer(player.id);
                           ref.invalidate(playersProvider);
-                        }
+                        },
                       ),
                     ],
                   ),

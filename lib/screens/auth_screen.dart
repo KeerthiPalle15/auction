@@ -20,11 +20,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     setState(() => _isLoading = true);
     try {
       final service = ref.read(supabaseServiceProvider);
-      await service.signInEmail(_emailController.text, _passwordController.text);
+      await service.signInEmail(
+        _emailController.text,
+        _passwordController.text,
+      );
       if (mounted) context.go('/');
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -35,15 +40,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     setState(() => _isLoading = true);
     try {
       final service = ref.read(supabaseServiceProvider);
-      await service.signUpEmail(_emailController.text, _passwordController.text, _selectedRole);
+      await service.signUpEmail(
+        _emailController.text,
+        _passwordController.text,
+        _selectedRole,
+      );
       if (mounted) {
-         ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('Registered! Please login.'))
-         );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registered! Please login.')),
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -61,7 +72,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.sports_cricket, size: 80, color: Colors.greenAccent),
+              const Icon(
+                Icons.sports_cricket,
+                size: 80,
+                color: Colors.greenAccent,
+              ),
               const SizedBox(height: 20),
               const Text(
                 'CricTourney',
@@ -95,7 +110,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedRole,
+                initialValue: _selectedRole,
                 dropdownColor: Colors.grey[900],
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
@@ -104,9 +119,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   prefixIcon: Icon(Icons.badge),
                 ),
                 items: const [
-                  DropdownMenuItem<String>(value: 'viewer', child: Text('Viewer')),
-                  DropdownMenuItem<String>(value: 'captain', child: Text('Team Captain')),
-                  DropdownMenuItem<String>(value: 'admin', child: Text('Admin / Umpire')),
+                  DropdownMenuItem<String>(
+                    value: 'viewer',
+                    child: Text('Viewer'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'captain',
+                    child: Text('Team Captain'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'admin',
+                    child: Text('Admin / Umpire'),
+                  ),
                 ],
                 onChanged: (val) {
                   if (val != null) {
@@ -116,7 +140,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               ),
               const SizedBox(height: 32),
               _isLoading
-                  ? const Center(child: CircularProgressIndicator(color: Colors.greenAccent))
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.greenAccent,
+                      ),
+                    )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -126,7 +154,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             backgroundColor: Colors.green,
                             padding: const EdgeInsets.all(16),
                           ),
-                          child: const Text('LOGIN', style: TextStyle(fontSize: 16)),
+                          child: const Text(
+                            'LOGIN',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                         const SizedBox(height: 16),
                         OutlinedButton(
@@ -135,7 +166,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             padding: const EdgeInsets.all(16),
                             foregroundColor: Colors.greenAccent,
                           ),
-                          child: const Text('REGISTER', style: TextStyle(fontSize: 16)),
+                          child: const Text(
+                            'REGISTER',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ],
                     ),

@@ -8,7 +8,8 @@ class UserManagementScreen extends ConsumerStatefulWidget {
   const UserManagementScreen({super.key});
 
   @override
-  ConsumerState<UserManagementScreen> createState() => _UserManagementScreenState();
+  ConsumerState<UserManagementScreen> createState() =>
+      _UserManagementScreenState();
 }
 
 class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
@@ -34,13 +35,22 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
             itemCount: users.length,
             itemBuilder: (ctx, i) {
               final user = users[i];
-              final teamName = teams.firstWhere((t) => t.id == user.teamId, orElse: () => TeamModel(id: '', name: 'None', purse: 0)).name;
+              final teamName = teams
+                  .firstWhere(
+                    (t) => t.id == user.teamId,
+                    orElse: () => TeamModel(id: '', name: 'None', purse: 0),
+                  )
+                  .name;
 
               return Card(
                 child: ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person_outline)),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.person_outline),
+                  ),
                   title: Text(user.email),
-                  subtitle: Text('Role: ${user.role.toUpperCase()} | Team: $teamName'),
+                  subtitle: Text(
+                    'Role: ${user.role.toUpperCase()} | Team: $teamName',
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.settings, color: Colors.blue),
                     onPressed: () => _showUserOptions(user, teams),
@@ -69,29 +79,56 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Update User: ${user.email}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Update User: ${user.email}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
-                    value: role,
+                    initialValue: role,
                     decoration: const InputDecoration(labelText: 'Role'),
-                    items: ['admin', 'captain', 'viewer'].map((r) => DropdownMenuItem(value: r, child: Text(r.toUpperCase()))).toList(),
+                    items: ['admin', 'captain', 'viewer']
+                        .map(
+                          (r) => DropdownMenuItem(
+                            value: r,
+                            child: Text(r.toUpperCase()),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (v) => setStateSB(() => role = v!),
                   ),
                   const SizedBox(height: 16),
                   if (role == 'captain')
                     DropdownButtonFormField<String>(
-                      value: teamId,
-                      decoration: const InputDecoration(labelText: 'Assign Team'),
-                      items: teams.map((t) => DropdownMenuItem(value: t.id, child: Text(t.name))).toList(),
+                      initialValue: teamId,
+                      decoration: const InputDecoration(
+                        labelText: 'Assign Team',
+                      ),
+                      items: teams
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t.id,
+                              child: Text(t.name),
+                            ),
+                          )
+                          .toList(),
                       onChanged: (v) => setStateSB(() => teamId = v),
                     ),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () async {
-                      await ref.read(supabaseServiceProvider).client.from('users').update({
-                        'role': role,
-                        'team_id': role == 'captain' ? teamId : null,
-                      }).eq('id', user.id);
+                      await ref
+                          .read(supabaseServiceProvider)
+                          .client
+                          .from('users')
+                          .update({
+                            'role': role,
+                            'team_id': role == 'captain' ? teamId : null,
+                          })
+                          .eq('id', user.id);
                       if (mounted) {
                         Navigator.pop(context);
                         setState(() {});
@@ -102,7 +139,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                 ],
               ),
             );
-          }
+          },
         );
       },
     );

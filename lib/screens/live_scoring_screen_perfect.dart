@@ -20,7 +20,7 @@ class _LiveScoringScreenState extends ConsumerState<LiveScoringScreen> {
   String? _strikerId;
   String? _nonStrikerId;
   String? _bowlerId;
-  int _currentInnings = 1;
+  final int _currentInnings = 1;
   int _firstInningsTotal = 0;
   int _currentOver = 0;
   int _currentBall = 0;
